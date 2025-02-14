@@ -6,32 +6,32 @@ This is a DAS gRPC Python service that implements a mock DAS server.
 
 1. **Install requirements**:
 
-   ```bash
-   pip install --upgrade pip setuptools wheel
-   pip install -r requirements.txt
-   ```
+```bash
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+```
 
 2. **Fetch `.proto` files**:
 
-   ```bash
-   make fetch
-   ```
+```bash
+make fetch
+```
 
 3. **Generate gRPC stubs**:
 
-   ```bash
-   make build
-   ```
+```bash
+make build
+```
 
 4. **Run the service**:
 
-   ```bash
-   python -m das_mock.main
-   ```
+```bash
+python -m das_mock.main
+```
 
-   To use it from DAS PostgreSQL client (available at [https://github.com/raw-labs/das-client-postgresql](https://github.com/raw-labs/das-client-postgresql)), you can setup this DAS by running first:
+To use it from DAS PostgreSQL client (available at [https://github.com/raw-labs/das-client-postgresql](https://github.com/raw-labs/das-client-postgresql)), you can setup this DAS by running first:
 
-   ```sql
+```sql
 DROP SERVER IF EXISTS das_python_mock CASCADE;
 DROP SCHEMA IF EXISTS test CASCADE;
 CREATE EXTENSION IF NOT EXISTS hstore;
@@ -45,11 +45,11 @@ CREATE SERVER das_python_mock FOREIGN DATA WRAPPER multicorn OPTIONS (
 );
 CREATE SCHEMA test;
 IMPORT FOREIGN SCHEMA test FROM SERVER das_python_mock INTO test;
-    ```
+```
 
-    ... and then querying it as, e.g.:
+... and then querying it as, e.g.:
 
-    ```sql
+```sql
 SELECT * from test.small_table;
 
  id |     name     
@@ -65,10 +65,10 @@ SELECT * from test.small_table;
   9 | Mock row #9
  10 | Mock row #10
 (10 rows)
-    ```
+```
 
 5. **Test**:
 
-   ```bash
-   pytest tests
-   ```
+```bash
+pytest tests
+```
