@@ -29,7 +29,13 @@ make build
 python -m das_mock.main
 ```
 
-To use it from DAS PostgreSQL client (available at [https://github.com/raw-labs/das-client-postgresql](https://github.com/raw-labs/das-client-postgresql)), you can setup this DAS by running first:
+To use it from DAS PostgreSQL client (available at [https://github.com/raw-labs/das-client-postgresql](https://github.com/raw-labs/das-client-postgresql)), you can setup this DAS by running, e.g.:
+
+```bash
+% psql -h 127.0.0.1 -p 65432 -U postgres
+```
+
+And then issuing the following SQL commands to setup the integration:
 
 ```sql
 DROP SERVER IF EXISTS das_python_mock CASCADE;
@@ -50,7 +56,7 @@ IMPORT FOREIGN SCHEMA test FROM SERVER das_python_mock INTO test;
 ... and then querying it as, e.g.:
 
 ```sql
-SELECT * from test.small_table;
+postgres=# SELECT * FROM test.small_table;
 
  id |     name     
 ----+--------------
