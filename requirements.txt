@@ -1,0 +1,6 @@
+requests
+grpcio
+grpcio-tools
+protobuf
+PyYAML
+pytest

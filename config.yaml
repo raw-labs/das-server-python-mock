@@ -1,0 +1,14 @@
+proto_urls:
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/services/health_service.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/services/registration_service.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/services/tables_service.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/services/functions_service.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/common/das.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/common/environment.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/types/types.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/types/values.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/tables/tables.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/functions/functions.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/query/query.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/query/quals.proto
+  - https://raw.githubusercontent.com/raw-labs/protocol-das/refs/heads/protocol-v1/src/main/protobuf/com/rawlabs/protocol/das/v1/query/operators.proto
