@@ -1,10 +1,6 @@
-# My gRPC Project
+# Python DAS gRPC Server
 
-This is a sample gRPC Python service that:
-
-1. Fetches `.proto` files from remote URLs (defined in `config.yaml`).
-2. Generates Python gRPC stubs.
-3. Implements a mock service.
+This is a DAS gRPC Python service that implements a mock DAS server.
 
 ## Quickstart
 
@@ -34,6 +30,7 @@ This is a sample gRPC Python service that:
    ```
 
    To use it from DAS PostgreSQL client (available at [https://github.com/raw-labs/das-client-postgresql](https://github.com/raw-labs/das-client-postgresql)), you can setup this DAS by running first:
+
    ```sql
 DROP SERVER IF EXISTS das_python_mock CASCADE;
 DROP SCHEMA IF EXISTS test CASCADE;
@@ -75,4 +72,3 @@ SELECT * from test.small_table;
    ```bash
    pytest tests
    ```
-

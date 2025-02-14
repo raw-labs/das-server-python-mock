@@ -4,6 +4,68 @@ import uuid
 import logging
 from concurrent import futures
 
+# ===================================================================================
+#
+#    This code implements a MOCK gRPC server that simulates "DAS" (Data Access Service)
+#    instances and tables. Each DAS instance can manage multiple tables (e.g., "small_table"
+#    and "large_table"). The "RegistrationService" allows clients to register/unregister
+#    DAS instances. The "TablesService" provides various table-related RPCs like GetTableDefinitions,
+#    ExecuteTable, Insert, Delete, etc.
+#
+#    The overall architecture:
+#
+#         +------------------------------------------+
+#         |                                          |
+#         |     gRPC server (serve() function)       |
+#         |                                          |
+#         +----------+-----------------------+--------+
+#                    |                       |
+#         Registers  |                       | Provides table  <--- ( streaming rows, etc. )
+#      +-------------v---------+    +--------v-------------+------------+
+#      | RegistrationService   |    | TablesService        |            |
+#      |   - Register()        |    |   - GetTableDefs()   |            |
+#      |   - Unregister()      |    |   - ExecuteTable()   |            |
+#      +-------------+---------+    +---------+------------+------------+
+#                    |                       |
+#                    | finds/manages         | obtains table object from
+#                    | the DAS instance      | the DAS instance
+#                    v                       v
+#             active_dases dict         +----------------------+
+#          { das_id -> MockDAS }        | MockDAS (das_id=X)   |
+#                                       | - small_table        |
+#                                       | - large_table        |
+#                                       | - close()            |
+#                                       +---------+------------+
+#                                                 |
+#       +-----------------------------------------+-----------------------+
+#       | Each MockTable object (small_table, large_table) has methods   |
+#       | for get_definitions, estimate, explain, execute, etc.         |
+#       | executing "execute" can yield row batches to the client,      |
+#       | streaming them in a loop.                                     |
+#       +---------------------------------------------------------------+
+#
+#    NOTES:
+#    1) We store active DAS instances in the global dict "active_dases".
+#    2) The "MockDAS" class holds two "MockTable" objects. A small one (10 rows) and a
+#       larger one (1000 rows). In a real system, you'd connect to an actual DB or
+#       remote system.
+#    3) The "ExecuteTable" method returns row batches in a streaming fashion:
+#       - We pass a "context" object so if the client cancels the RPC, we can stop early.
+#    4) If an operation is unimplemented (like insert, delete, etc.), we throw a
+#       gRPC StatusCode.UNIMPLEMENTED error.
+#
+#    The lifecycle:
+#    - A client calls Register() with some "mock" definition => a new MockDAS is created
+#      and put into active_dases[das_id].
+#    - The client calls (e.g.) GetTableDefinitions() referencing that das_id => we find
+#      the MockDAS and then get table definitions.
+#    - The client calls ExecuteTable() => the code obtains the MockTable from the DAS,
+#      then streams rows back in small batches. The client can cancel at any time.
+#    - If client calls Unregister() => we pop the DAS from active_dases and close it.
+#
+# ===================================================================================
+
+
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -260,7 +322,7 @@ class MockDAS:
         logger.info("Creating MockDAS for das_id=%s with options=%s", das_id, self.options)
 
         self.small_table = MockTable(nrows=10, table_name="small_table")
-        self.large_table = MockTable(nrows=100000000, table_name="large_table")
+        self.large_table = MockTable(nrows=1000, table_name="large_table")
 
     def get_definitions(self):
         return [
