@@ -52,7 +52,15 @@ from concurrent import futures
 #    3) The "ExecuteTable" method returns row batches in a streaming fashion:
 #       - We pass a "context" object so if the client cancels the RPC, we can stop early.
 #    4) If an operation is unimplemented (like insert, delete, etc.), we throw a
-#       gRPC StatusCode.UNIMPLEMENTED error.
+#       gRPC StatusCode.UNIMPLEMENTED error. If an operation has invalid arguments,
+#       we throw a gRPC StatusCode.INVALID_ARGUMENT. In both cases, the expectation
+#       is that the client does not retry the call since they cannot be recovered from.
+#       However, for all other gRPC StatusCode, the client may retry the call, as it
+#       can assume the error is transient (e.g. the DAS server crashed and was restarted).
+#       Moreover, in those cases, the client can retry the DAS registration call; this
+#       can happen, for instance, when the client receives gRPC StatusCode.NOT_FOUND, which
+#       can trigger the client do re-register the DAS, as it assumes this DAS server
+#       crashed and lost its in-memory state.
 #
 #    The lifecycle:
 #    - A client calls Register() with some "mock" definition => a new MockDAS is created
