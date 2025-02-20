@@ -18,7 +18,9 @@ setuptools.setup(
         "grpcio==1.51.1",
         "grpcio-tools==1.51.1",
         "protobuf==4.21.12",
-        "PyYAML==6.0"
+        "PyYAML==6.0",
+        "requests>=2.31.0",
+        "urllib3<2.0.0"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
